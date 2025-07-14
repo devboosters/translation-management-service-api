@@ -125,3 +125,7 @@ PostMan environment and API collection are available at the root of the same rep
 
 These files are needed to be imported before using API calls
 
+- **About Caching**: 
+
+I didn't integrate any cache service inside the application at the moment but for getting information like how the implementation will have a slight change, I have created a function (getForExport() in commented form ) and commented it out for reviewing purposes.
+
