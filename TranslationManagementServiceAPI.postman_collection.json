@@ -1,0 +1,361 @@
+{
+	"info": {
+		"_postman_id": "5c2606fc-8ae9-4de7-b882-8b7f7f931aea",
+		"name": "Translation Management API",
+		"description": "API for managing translations with multi-language support",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2377015"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api_token\", jsonData.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test-api-user-4@example.com\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api_token\", jsonData.access_token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test User 4\",\n    \"email\": \"test-api-user-4@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/register?XDEBUG_SESSION_START=PHPSTORM",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"register"
+							],
+							"query": [
+								{
+									"key": "XDEBUG_SESSION_START",
+									"value": "PHPSTORM"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Translations",
+			"item": [
+				{
+					"name": "Create Translation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"group\": \"validation\",\n    \"key\": \"required\",\n    \"value\": \"This field is required\",\n    \"locale\": \"en\",\n    \"tag\": \"web\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/translations",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"translations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Translation",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/translations/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"translations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Translation",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"value\": \"Updated value\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/translations/12",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"translations",
+								"12"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Translation",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/translations/12",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"translations",
+								"12"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Translations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/translations/search?query=key_1&tag=web&locale=en",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"translations",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "key_1"
+								},
+								{
+									"key": "tag",
+									"value": "web"
+								},
+								{
+									"key": "locale",
+									"value": "en"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Export Translations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/translations/export?tag=web&locale=en",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"translations",
+								"export"
+							],
+							"query": [
+								{
+									"key": "tag",
+									"value": "web"
+								},
+								{
+									"key": "locale",
+									"value": "en"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/health",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{api_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "api_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

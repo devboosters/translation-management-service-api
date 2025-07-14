@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: translation-management-service-app
+        volumes:
+            - .:/var/www
+            - ./docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+        environment:
+            - DB_HOST=db
+            - DB_PORT=3306
+            - DB_DATABASE=${DB_DATABASE}
+            - DB_USERNAME=${DB_USERNAME}
+            - DB_PASSWORD=${DB_PASSWORD}
+        depends_on:
+            - db
+        networks:
+            - translation-network
+
+    db:
+        image: mysql:8.0
+        container_name: translation-db
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - dbdata:/var/lib/mysql
+            - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+        ports:
+            - "3306:3306"
+        networks:
+            - translation-network
+
+    webserver:
+        image: nginx:alpine
+        container_name: translation-webserver
+        ports:
+            - "8000:80"
+            - "8003:80"
+        volumes:
+            - .:/var/www
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - app
+        networks:
+            - translation-network
+
+    composer:
+        image: composer:latest
+        container_name: translation-composer
+        volumes:
+            - .:/var/www
+        working_dir: /var/www
+        networks:
+            - translation-network
+
+    artisan:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: translation-artisan
+        working_dir: /var/www
+        depends_on:
+            - db
+        volumes:
+            - .:/var/www
+        entrypoint: ['php', '/var/www/artisan']
+        networks:
+            - translation-network
+
+volumes:
+    dbdata:
+
+networks:
+    translation-network:
+        driver: bridge
